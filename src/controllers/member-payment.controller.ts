@@ -49,7 +49,10 @@ export default class MemberPaymentController {
         // process payment
 
         // save new user
-        await MembersModel.save(discordUsername);
+        const member = await MembersModel.save(discordUsername);
+
+        // save payment to db
+        await PaymentsModel.save(member.id, amount);
 
         // respond with discord invite link
       }
