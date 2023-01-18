@@ -1,7 +1,7 @@
 import { Member } from '@/interfaces/members.interface';
 import { poolPromise } from '../databases/index';
 
-const SOFT_DELTES = true;
+const SOFT_DELTES = false;
 
 export default class MembersModel {
   public static async save(discordUsername: string): Promise<void> {
@@ -22,14 +22,27 @@ export default class MembersModel {
     const sql = `SELECT * FROM members`;
 
     try {
-      const members = await poolPromise.execute(sql);
+      const [members] = await poolPromise.execute(sql);
       return members;
     } catch (error) {
       console.error(error);
     }
   }
 
-  public static async getMember(discordUsername: string): Promise<Member> {
+  public static async getMemberById(id: any): Promise<Member> {
+    const sql = `SELECT * FROM members WHERE id='${id}'`;
+
+    try {
+      const [[member]] = await poolPromise.execute(sql);
+      return member;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public static async getMemberByDiscordUsername(
+    discordUsername: string,
+  ): Promise<Member> {
     const sql = `SELECT * FROM members WHERE discord_username='${discordUsername}'`;
 
     try {
@@ -55,7 +68,22 @@ export default class MembersModel {
     }
   }
 
-  public static async delete(discordUsername: string): Promise<void> {
+  public static async delete(id: any): Promise<void> {
+    const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const sql = SOFT_DELTES
+      ? `UDPATE members SET deleted_at='${currentDate}' WHERE id='${id}'`
+      : `DELETE FROM members WHERE id='${id}'`;
+
+    try {
+      await poolPromise.execute(sql);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public static async deleteByDiscordUsername(
+    discordUsername: string,
+  ): Promise<void> {
     const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const sql = SOFT_DELTES
       ? `UDPATE members SET deleted_at='${currentDate}' WHERE discord_username='${discordUsername}'`

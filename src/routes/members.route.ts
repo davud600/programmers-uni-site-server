@@ -14,5 +14,11 @@ export default class MembersRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.membersController.index);
     this.router.post(`${this.path}`, this.membersController.createMember);
+    this.router.get(`${this.path}/:id`, this.membersController.getMember);
+    this.router.delete(`${this.path}/:id`, this.membersController.deleteMember);
+    this.router.delete(
+      `${this.path}`,
+      this.membersController.deleteMemberByDiscordUsername,
+    );
   }
 }

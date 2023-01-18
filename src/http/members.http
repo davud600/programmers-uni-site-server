@@ -1,6 +1,32 @@
-POST http://localhost:3000/members
-content-type: application/json
+# baseURL
+@baseURL = http://localhost:3000/members
+
+###
+# Find All Members
+GET {{ baseURL }}
+
+###
+# Find Member By Id
+GET {{ baseURL }}/7
+
+###
+# Create Member
+POST {{ baseURL }}
+Content-Type: application/json
 
 {
-    "discordUsername": "davudi#2102"
+    "discordUsername":"exampleee"
+}
+
+###
+# Delete Member By Id
+DELETE {{ baseURL }}/7
+
+###
+# Delete Member By Discord Username
+DELETE {{ baseURL }}
+Content-Type: application/json
+
+{
+    "discordUsername":"rinor"
 }
