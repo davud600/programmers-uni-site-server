@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import MembersModel from '@models/members.model';
+import PaymentsModel from '@/models/payments.model';
 
 const MILLISECONDS_IN_DAY = 86400000;
 const MIN_DAYS_BEFORE_PAYING = 25;
@@ -11,9 +12,11 @@ export default class MemberPaymentController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { discordUsername } = req.body;
+      const { discordUsername, amount } = req.body;
 
-      const member = await MembersModel.getMember(discordUsername);
+      const member = await MembersModel.getMemberByDiscordUsername(
+        discordUsername,
+      );
 
       // request from client to make a new payment
 
@@ -32,6 +35,9 @@ export default class MemberPaymentController {
         }
 
         // process payment
+
+        // save payment to db
+        await PaymentsModel.save(member.id, amount);
 
         // update their last_paid to current date and warned_about_payment to false
         await MembersModel.setLastPaid(discordUsername);
