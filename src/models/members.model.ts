@@ -3,7 +3,7 @@ import { poolPromise } from '../databases/index';
 
 const SOFT_DELTES = true;
 
-export default class MemberModel {
+export default class MembersModel {
   public static async save(discordUsername: string): Promise<void> {
     const lastPaidDate = new Date()
       .toISOString()
