@@ -18,7 +18,7 @@ export default class MemberPaymentController {
       // request from client to make a new payment
 
       if (member) {
-        // also check if their last_paid is more than 25 days ago
+        // check if their last_paid is more than 25 days ago
         if (
           Date.now() - Date.parse(member.last_paid) <
           MIN_DAYS_BEFORE_PAYING * MILLISECONDS_IN_DAY
