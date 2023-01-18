@@ -1,0 +1,24 @@
+# baseURL
+@baseURL = http://localhost:3000/payments
+
+###
+# Find All Payments
+GET {{ baseURL }}
+
+###
+# Find Payment By Id
+GET {{ baseURL }}/1
+
+###
+# Create Payment
+POST {{ baseURL }}
+Content-Type: application/json
+
+{
+    "memberId": 7,
+	"amount": 10
+}
+
+###
+# Delete Payment By Id
+DELETE {{ baseURL }}/1
