@@ -32,6 +32,24 @@ export default class MembersController {
     }
   };
 
+  public getMemberByDiscordUsername = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const { discordUsername } = req.body;
+
+      const member = await MembersModel.getMemberByDiscordUsername(
+        discordUsername,
+      );
+
+      res.status(200).send(member);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public createMember = async (
     req: Request,
     res: Response,

@@ -10,6 +10,15 @@ GET {{ baseURL }}
 GET {{ baseURL }}/7
 
 ###
+# Find Member By Discord Username
+GET {{ baseURL }}
+Content-Type: application/json
+
+{
+    "discordUsername":"example"
+}
+
+###
 # Create Member
 POST {{ baseURL }}
 Content-Type: application/json
