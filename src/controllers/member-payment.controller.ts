@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import MembersModel from '@models/members.model';
 import PaymentsModel from '@/models/payments.model';
+import { getDiscordInviteLink } from '@/utils/discord';
 
 const MILLISECONDS_IN_DAY = 86400000;
 const MIN_DAYS_BEFORE_PAYING = 25;
@@ -43,7 +44,9 @@ export default class MemberPaymentController {
         await MembersModel.setLastPaid(discordUsername);
 
         if (member.in_server == false) {
-          // then respond with discord server invite link that expires after one click
+          // then respond with discord server invite link
+          res.status(200).send({ discordInviteLink: getDiscordInviteLink() });
+          return;
         }
       } else {
         // process payment
@@ -55,6 +58,8 @@ export default class MemberPaymentController {
         await PaymentsModel.save(member.id, amount);
 
         // respond with discord invite link
+        res.status(200).send({ discordInviteLink: getDiscordInviteLink() });
+        return;
       }
 
       res.status(200).send('Payment was successful!');
