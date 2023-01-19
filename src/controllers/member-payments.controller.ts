@@ -19,50 +19,37 @@ export default class MemberPaymentController {
         discordUsername,
       );
 
-      // request from client to make a new payment
-
-      if (member) {
-        // check if their last_paid is more than 25 days ago
-        if (
-          Date.now() - Date.parse(member.last_paid) <
+      // check if their last_paid is more than 25 days ago
+      if (
+        member &&
+        Date.now() - Date.parse(member.last_paid) <
           MIN_DAYS_BEFORE_PAYING * MILLISECONDS_IN_DAY
-        ) {
-          res
-            .status(400)
-            .send(
-              "Can't make payment because your last payment was less than 25 days ago!",
-            );
-          return;
-        }
-
-        // process payment
-
-        // save payment to db
-        await PaymentService.save(member.id, amount);
-
-        // update their last_paid to current date and warned_about_payment to false
-        await MemberService.setLastPaid(discordUsername);
-
-        if (member.in_server == false) {
-          // then respond with discord server invite link
-          res.status(200).send({ discordInviteLink: getDiscordInviteLink() });
-          return;
-        }
-      } else {
-        // process payment
-
-        // save new user
-        const member = await MemberService.save(discordUsername);
-
-        // save payment to db
-        await PaymentService.save(member.id, amount);
-
-        // respond with discord invite link
-        res.status(200).send({ discordInviteLink: getDiscordInviteLink() });
+      ) {
+        res
+          .status(400)
+          .send(
+            "Can't make payment because your last payment was less than 25 days ago!",
+          );
         return;
       }
 
-      res.status(200).send('Payment was successful!');
+      // process payment
+
+      if (member) {
+        await MemberService.renewMembership(discordUsername);
+        await PaymentService.save(member.id, amount);
+
+        res
+          .status(200)
+          .send('Payment was successful and your membership has been renewed!');
+        return;
+      }
+
+      const newMember = await MemberService.save(discordUsername);
+      await PaymentService.save(newMember.id, amount);
+
+      res.status(200).send({ discordInviteLink: getDiscordInviteLink() });
+      return;
     } catch (error) {
       next(error);
     }

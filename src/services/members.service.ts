@@ -54,13 +54,13 @@ export default class MemberService {
     }
   }
 
-  public static async setLastPaid(discordUsername: string): Promise<void> {
+  public static async renewMembership(discordUsername: string): Promise<void> {
     const lastPaidDate = new Date()
       .toISOString()
       .slice(0, 19)
       .replace('T', ' ');
 
-    const sql = `UPDATE members SET last_paid='${lastPaidDate}', warned_about_payment='${0}' WHERE discord_username='${discordUsername}'`;
+    const sql = `UPDATE members SET last_paid='${lastPaidDate}', warned_about_payment='${0}', is_member=${true} WHERE discord_username='${discordUsername}'`;
 
     try {
       await poolPromise.execute(sql);
