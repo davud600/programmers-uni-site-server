@@ -4,7 +4,7 @@ import { poolPromise } from '../databases/index';
 const SOFT_DELTES = false;
 
 export default class MembersModel {
-  public static async save(discordUsername: string): Promise<void> {
+  public static async save(discordUsername: string): Promise<Member> {
     const lastPaidDate = new Date()
       .toISOString()
       .slice(0, 19)
@@ -13,6 +13,7 @@ export default class MembersModel {
 
     try {
       await poolPromise.execute(sql);
+      return await this.getMemberByDiscordUsername(discordUsername);
     } catch (error) {
       console.error(error);
     }
