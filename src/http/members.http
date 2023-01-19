@@ -7,7 +7,7 @@ GET {{ baseURL }}
 
 ###
 # Find Member By Id
-GET {{ baseURL }}/7
+GET {{ baseURL }}/12
 
 ###
 # Find Member By Discord Username
@@ -15,7 +15,7 @@ GET {{ baseURL }}
 Content-Type: application/json
 
 {
-    "discordUsername":"example"
+    "discordUsername":"davudi"
 }
 
 ###
@@ -24,12 +24,12 @@ POST {{ baseURL }}
 Content-Type: application/json
 
 {
-    "discordUsername":"exampleee"
+    "discordUsername":"exampleeesjkdhf"
 }
 
 ###
 # Delete Member By Id
-DELETE {{ baseURL }}/7
+DELETE {{ baseURL }}/18
 
 ###
 # Delete Member By Discord Username
@@ -37,5 +37,5 @@ DELETE {{ baseURL }}
 Content-Type: application/json
 
 {
-    "discordUsername":"rinor"
+    "discordUsername":"newuser5"
 }

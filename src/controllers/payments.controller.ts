@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import PaymentsModel from '@models/payments.model';
+import PaymentService from '@services/payments.service';
 
 export default class PaymentsController {
   public index = async (
@@ -8,7 +8,7 @@ export default class PaymentsController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const payments = await PaymentsModel.findAll();
+      const payments = await PaymentService.findAll();
 
       res.status(200).send(payments);
     } catch (error) {
@@ -24,7 +24,7 @@ export default class PaymentsController {
     try {
       const { id } = req.params;
 
-      const payment = await PaymentsModel.getPayment(id);
+      const payment = await PaymentService.getPayment(id);
 
       res.status(200).send(payment);
     } catch (error) {
@@ -40,7 +40,7 @@ export default class PaymentsController {
     try {
       const { memberId, amount } = req.body;
 
-      await PaymentsModel.save(memberId, amount);
+      await PaymentService.save(memberId, amount);
 
       res.sendStatus(200);
     } catch (error) {
@@ -56,7 +56,7 @@ export default class PaymentsController {
     try {
       const { id } = req.params;
 
-      await PaymentsModel.delete(id);
+      await PaymentService.delete(id);
 
       res.sendStatus(200);
     } catch (error) {

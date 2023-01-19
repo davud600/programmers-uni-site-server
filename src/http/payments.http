@@ -7,7 +7,7 @@ GET {{ baseURL }}
 
 ###
 # Find Payment By Id
-GET {{ baseURL }}/1
+GET {{ baseURL }}/7
 
 ###
 # Create Payment
@@ -21,4 +21,4 @@ Content-Type: application/json
 
 ###
 # Delete Payment By Id
-DELETE {{ baseURL }}/1
+DELETE {{ baseURL }}/8

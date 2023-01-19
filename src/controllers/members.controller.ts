@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import MembersModel from '@models/members.model';
+import MemberService from '@/services/members.service';
 
 export default class MembersController {
   public index = async (
@@ -8,7 +8,7 @@ export default class MembersController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const members = await MembersModel.findAll();
+      const members = await MemberService.findAll();
 
       res.status(200).send(members);
     } catch (error) {
@@ -24,7 +24,7 @@ export default class MembersController {
     try {
       const { id } = req.params;
 
-      const member = await MembersModel.getMemberById(id);
+      const member = await MemberService.getMemberById(id);
 
       res.status(200).send(member);
     } catch (error) {
@@ -40,7 +40,7 @@ export default class MembersController {
     try {
       const { discordUsername } = req.body;
 
-      const member = await MembersModel.getMemberByDiscordUsername(
+      const member = await MemberService.getMemberByDiscordUsername(
         discordUsername,
       );
 
@@ -58,7 +58,7 @@ export default class MembersController {
     try {
       const { discordUsername } = req.body;
 
-      if (await MembersModel.getMemberByDiscordUsername(discordUsername)) {
+      if (await MemberService.getMemberByDiscordUsername(discordUsername)) {
         res
           .status(400)
           .send('Member with given discord username already exists!');
@@ -71,7 +71,7 @@ export default class MembersController {
         return;
       }
 
-      await MembersModel.save(discordUsername);
+      await MemberService.save(discordUsername);
 
       res.sendStatus(200);
     } catch (error) {
@@ -87,7 +87,7 @@ export default class MembersController {
     try {
       const { id } = req.params;
 
-      await MembersModel.delete(id);
+      await MemberService.delete(id);
 
       res.sendStatus(200);
     } catch (error) {
@@ -103,7 +103,7 @@ export default class MembersController {
     try {
       const { discordUsername } = req.body;
 
-      await MembersModel.deleteByDiscordUsername(discordUsername);
+      await MemberService.deleteByDiscordUsername(discordUsername);
 
       res.sendStatus(200);
     } catch (error) {

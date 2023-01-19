@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import MembersModel from '@models/members.model';
-import PaymentsModel from '@/models/payments.model';
+import MemberService from '@/services/members.service';
+import PaymentService from '@/services/payments.service';
 import { getDiscordInviteLink } from '@/utils/discord';
 
 const MILLISECONDS_IN_DAY = 86400000;
@@ -15,7 +15,7 @@ export default class MemberPaymentController {
     try {
       const { discordUsername, amount } = req.body;
 
-      const member = await MembersModel.getMemberByDiscordUsername(
+      const member = await MemberService.getMemberByDiscordUsername(
         discordUsername,
       );
 
@@ -38,10 +38,10 @@ export default class MemberPaymentController {
         // process payment
 
         // save payment to db
-        await PaymentsModel.save(member.id, amount);
+        await PaymentService.save(member.id, amount);
 
         // update their last_paid to current date and warned_about_payment to false
-        await MembersModel.setLastPaid(discordUsername);
+        await MemberService.setLastPaid(discordUsername);
 
         if (member.in_server == false) {
           // then respond with discord server invite link
@@ -52,10 +52,10 @@ export default class MemberPaymentController {
         // process payment
 
         // save new user
-        const member = await MembersModel.save(discordUsername);
+        const member = await MemberService.save(discordUsername);
 
         // save payment to db
-        await PaymentsModel.save(member.id, amount);
+        await PaymentService.save(member.id, amount);
 
         // respond with discord invite link
         res.status(200).send({ discordInviteLink: getDiscordInviteLink() });

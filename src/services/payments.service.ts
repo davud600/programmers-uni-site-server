@@ -3,7 +3,7 @@ import { poolPromise } from '../databases/index';
 
 const SOFT_DELTES = false;
 
-export default class PaymentsModel {
+export default class PaymentService {
   public static async save(memberId: number, amount: number): Promise<void> {
     const paymentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const sql = `INSERT INTO payments (member_id, payment_date, amount, created_at) VALUES ('${memberId}', '${paymentDate}', '${amount}', '${paymentDate}');`;
