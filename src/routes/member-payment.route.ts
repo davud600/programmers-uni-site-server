@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import MemberPaymentController from '@/controllers/member-payments.controller';
 import { Routes } from '@interfaces/routes.interface';
+import { MemberPaymentDto } from '@/dtos/member-payment.dto';
+import validationMiddleware from '@/middlewares/validation.middleware';
 
 class MemberPaymentRoute implements Routes {
   public path = '/api/member-payments';
@@ -12,7 +14,11 @@ class MemberPaymentRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}`, this.memberPaymentController.index);
+    this.router.post(
+      `${this.path}`,
+      validationMiddleware(MemberPaymentDto, 'body'),
+      this.memberPaymentController.index,
+    );
   }
 }
 

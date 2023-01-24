@@ -4,6 +4,6 @@ POST http://localhost:3000/api/member-payments
 content-type: application/json
 
 {
-    "discordUsername": "newuser5",
+    "discordUsername": "newuser#9222",
     "amount": 10
 }
