@@ -110,4 +110,78 @@ export default class MembersController {
       next(error);
     }
   };
+
+  public warnMember = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const { id } = req.params;
+
+      await MemberService.warnMember(id);
+
+      res.sendStatus(200);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public removeMember = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const { id } = req.params;
+
+      await MemberService.removeMember(id);
+
+      res.sendStatus(200);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getMembersToWarn = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const membersToWarm = await MemberService.getMembersToWarn();
+
+      res.status(200).send(membersToWarm);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getMembersToRemove = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const membersToRemove = await MemberService.getMembersToRemove();
+
+      res.status(200).send(membersToRemove);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getMembersToUpgrade = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const membersToUpgrade = await MemberService.getMembersToUpgrade();
+
+      res.status(200).send(membersToUpgrade);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
