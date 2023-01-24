@@ -3,6 +3,9 @@ import { poolPromise } from '../databases/index';
 
 const SOFT_DELTES = false;
 
+const MAX_DAYS_WITHOUT_PAYING_WARNING = 28;
+const MAX_DAYS_WITHOUT_PAYING = 32;
+
 export default class MemberService {
   public static async save(discordUsername: string): Promise<Member> {
     const lastPaidDate = new Date()
@@ -92,6 +95,64 @@ export default class MemberService {
 
     try {
       await poolPromise.execute(sql);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public static async warnMember(id: string): Promise<void> {
+    const sql = `UPDATE members SET warned_about_payment=${true} WHERE id='${id}'`;
+
+    try {
+      await poolPromise.execute(sql);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public static async removeMember(id: string): Promise<void> {
+    const sql = `UPDATE members SET warned_about_payment=${false}, is_member=${false} WHERE id='${id}'`;
+
+    try {
+      await poolPromise.execute(sql);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public static async getMembersToWarn(): Promise<Member[]> {
+    const sql = `SELECT * FROM members
+  WHERE last_paid < DATE_SUB(CURDATE(), INTERVAL ${MAX_DAYS_WITHOUT_PAYING_WARNING} DAY) AND warned_about_payment=${false} AND is_member=${true}`;
+
+    try {
+      const [members] = await poolPromise.execute(sql);
+
+      return members;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public static async getMembersToRemove(): Promise<Member[]> {
+    const sql = `SELECT * FROM members
+  WHERE last_paid < DATE_SUB(CURDATE(), INTERVAL ${MAX_DAYS_WITHOUT_PAYING} DAY) AND warned_about_payment=${true} AND is_member=${true}`;
+
+    try {
+      const [members] = await poolPromise.execute(sql);
+
+      return members;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public static async getMembersToUpgrade(): Promise<Member[]> {
+    const sql = `SELECT * FROM members WHERE last_paid > DATE_SUB(CURDATE(), INTERVAL ${MAX_DAYS_WITHOUT_PAYING_WARNING} DAY) AND is_member=${true}`;
+
+    try {
+      const [members] = await poolPromise.execute(sql);
+
+      return members;
     } catch (error) {
       console.error(error);
     }

@@ -39,3 +39,25 @@ Content-Type: application/json
 {
     "discordUsername":"newuser5"
 }
+
+###
+# Warn Member about payment
+POST {{ baseURL }}/warn/2
+Content-Type: application/json
+
+###
+# Remove Member role from discord user
+POST {{ baseURL }}/remove/2
+Content-Type: application/json
+
+###
+# Get members to warn about payment
+GET {{ baseURL }}/warn/get
+
+###
+# Get members to downgrade member role
+GET {{ baseURL }}/downgrade/get
+
+###
+# Get members to upgrade to member role
+GET {{ baseURL }}/upgrade/get
