@@ -3,7 +3,7 @@ import PaymentsController from '@controllers/payments.controller';
 import { Routes } from '@interfaces/routes.interface';
 
 export default class PaymentsRoute implements Routes {
-  public path = '/payments';
+  public path = '/api/payments';
   public router = Router();
   public paymentsController = new PaymentsController();
 

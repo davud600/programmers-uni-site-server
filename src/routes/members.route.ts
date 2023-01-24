@@ -3,7 +3,7 @@ import MembersController from '@controllers/members.controller';
 import { Routes } from '@interfaces/routes.interface';
 
 export default class MembersRoute implements Routes {
-  public path = '/members';
+  public path = '/api/members';
   public router = Router();
   public membersController = new MembersController();
 

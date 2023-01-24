@@ -1,5 +1,5 @@
 # baseURL
-@baseURL = http://localhost:3000/payments
+@baseURL = http://localhost:3000/api/payments
 
 ###
 # Find All Payments
