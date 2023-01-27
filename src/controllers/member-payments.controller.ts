@@ -3,9 +3,11 @@ import MemberService from '@/services/members.service';
 import PaymentService from '@/services/payments.service';
 import { getDiscordInviteLink } from '@/utils/discord';
 import { MemberPaymentDto } from '@/dtos/member-payment.dto';
+import PayseraService from '@/services/paysera.service';
 
 const MILLISECONDS_IN_DAY = 86400000;
 const MIN_DAYS_BEFORE_PAYING = 25;
+const amount = 10;
 
 export default class MemberPaymentController {
   public index = async (
@@ -14,7 +16,7 @@ export default class MemberPaymentController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { discordUsername, amount }: MemberPaymentDto = req.body;
+      const { discordUsername, email }: MemberPaymentDto = req.body;
 
       const member = await MemberService.getMemberByDiscordUsername(
         discordUsername,
@@ -35,6 +37,7 @@ export default class MemberPaymentController {
       }
 
       // process payment
+      PayseraService.checkout({ p_email: email });
 
       if (member) {
         await MemberService.renewMembership(discordUsername);
