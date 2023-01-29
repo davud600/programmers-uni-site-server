@@ -1,6 +1,6 @@
 import { IsEmail, IsString, Matches } from 'class-validator';
 
-export class MemberPaymentDto {
+export class MemberDto {
   @IsString()
   @Matches(/^[a-zA-Z0-9\ ._-]+#[0-9]{4,}$/, {
     message:

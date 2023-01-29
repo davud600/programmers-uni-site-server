@@ -7,12 +7,15 @@ const MAX_DAYS_WITHOUT_PAYING_WARNING = 28;
 const MAX_DAYS_WITHOUT_PAYING = 32;
 
 export default class MemberService {
-  public static async save(discordUsername: string): Promise<Member> {
+  public static async save(
+    discordUsername: string,
+    email: string,
+  ): Promise<Member> {
     const lastPaidDate = new Date()
       .toISOString()
       .slice(0, 19)
       .replace('T', ' ');
-    const sql = `INSERT INTO members (discord_username, last_paid, created_at) VALUES ('${discordUsername}', '${lastPaidDate}', '${lastPaidDate}');`;
+    const sql = `INSERT INTO members (discord_username, last_paid, email, created_at) VALUES ('${discordUsername}', '${lastPaidDate}', '${lastPaidDate}', '${email}');`;
 
     try {
       await poolPromise.execute(sql);
@@ -57,6 +60,17 @@ export default class MemberService {
     }
   }
 
+  public static async getMemberByEmail(email: string): Promise<Member> {
+    const sql = `SELECT * FROM members WHERE email='${email}'`;
+
+    try {
+      const [[member]] = await poolPromise.execute(sql);
+      return member;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   public static async renewMembership(discordUsername: string): Promise<void> {
     const lastPaidDate = new Date()
       .toISOString()
@@ -92,6 +106,19 @@ export default class MemberService {
     const sql = SOFT_DELTES
       ? `UDPATE members SET deleted_at='${currentDate}' WHERE discord_username='${discordUsername}'`
       : `DELETE FROM members WHERE discord_username='${discordUsername}'`;
+
+    try {
+      await poolPromise.execute(sql);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public static async deleteByEmail(email: string): Promise<void> {
+    const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const sql = SOFT_DELTES
+      ? `UDPATE members SET deleted_at='${currentDate}' WHERE email='${email}'`
+      : `DELETE FROM members WHERE email='${email}'`;
 
     try {
       await poolPromise.execute(sql);

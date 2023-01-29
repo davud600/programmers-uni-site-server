@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import MemberService from '@/services/members.service';
+import { MemberDto } from '@/dtos/member.dto';
 
 export default class MembersController {
   public index = async (
@@ -56,7 +57,7 @@ export default class MembersController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { discordUsername } = req.body;
+      const { discordUsername, email }: MemberDto = req.body;
 
       if (await MemberService.getMemberByDiscordUsername(discordUsername)) {
         res
@@ -65,13 +66,7 @@ export default class MembersController {
         return;
       }
 
-      if (!discordUsername) {
-        // should be put in a middleware function, not here
-        res.status(400).send('Discord username not provided!');
-        return;
-      }
-
-      await MemberService.save(discordUsername);
+      await MemberService.save(discordUsername, email);
 
       res.sendStatus(200);
     } catch (error) {
