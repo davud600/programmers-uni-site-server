@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import MemberService from '@/services/members.service';
 import PaymentService from '@/services/payments.service';
 import { getDiscordInviteLink } from '@/utils/discord';
-import { MemberPaymentDto } from '@/dtos/member-payment.dto';
+import { MemberDto } from '@/dtos/member.dto';
 import PayseraService from '@/services/paysera.service';
 
 const MILLISECONDS_IN_DAY = 86400000;
@@ -16,7 +16,7 @@ export default class MemberPaymentController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { discordUsername, email }: MemberPaymentDto = req.body;
+      const { discordUsername, email }: MemberDto = req.body;
 
       const member = await MemberService.getMemberByDiscordUsername(
         discordUsername,
@@ -49,7 +49,7 @@ export default class MemberPaymentController {
         return;
       }
 
-      const newMember = await MemberService.save(discordUsername);
+      const newMember = await MemberService.save(discordUsername, email);
       await PaymentService.save(newMember.id, amount);
 
       res.status(200).send({ discordInviteLink: getDiscordInviteLink() });
