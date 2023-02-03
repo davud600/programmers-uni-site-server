@@ -9,10 +9,9 @@ export default class ContactMailController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const { email, fullName, subject, messageContent }: ContactMailDto =
-        req.body;
+      const { fullName, email, messageContent }: ContactMailDto = req.body;
 
-      await MailService.sendMail({ email, fullName, subject, messageContent });
+      await MailService.sendMail({ fullName, email, messageContent });
 
       res.status(200).send();
       return;

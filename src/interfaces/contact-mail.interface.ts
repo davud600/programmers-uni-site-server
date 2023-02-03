@@ -1,6 +1,5 @@
 export interface ContactMail {
-  email: string;
   fullName: string;
-  subject: string;
+  email: string;
   messageContent: string;
 }
