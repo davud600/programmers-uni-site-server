@@ -1,7 +1,11 @@
+/*
+  Interface for databse Member row
+*/
 export interface Member {
   id: number;
   discord_username: string;
-  is_member: boolean; // bool: 0 / 1
+  is_member: boolean;
   last_paid: string;
-  warned_about_payment: boolean; // 0 / 1
+  warned_about_payment: boolean;
+  email: string;
 }

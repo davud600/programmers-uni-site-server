@@ -3,7 +3,7 @@ import MemberService from '@/services/members.service';
 import PaymentService from '@/services/payments.service';
 import { getDiscordInviteLink } from '@/utils/discord';
 import { MemberDto } from '@/dtos/member.dto';
-import PayseraService from '@/services/paysera.service';
+// import PayseraService from '@/services/paysera.service';
 
 const MILLISECONDS_IN_DAY = 86400000;
 const MIN_DAYS_BEFORE_PAYING = 25;
@@ -22,7 +22,10 @@ export default class MemberPaymentController {
         discordUsername,
       );
 
-      // check if their last_paid is more than 25 days ago
+      /*
+        Check if their last_paid is more than 25 days ago
+        by converting days to ms and checking difference
+      */
       if (
         member &&
         Date.now() - Date.parse(member.last_paid) <
@@ -36,8 +39,7 @@ export default class MemberPaymentController {
         return;
       }
 
-      // process payment
-      PayseraService.checkout({ p_email: email });
+      // PayseraService.checkout({ p_email: email });
 
       if (member) {
         await MemberService.renewMembership(discordUsername);
