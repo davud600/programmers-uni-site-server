@@ -1,0 +1,11 @@
+
+###
+POST http://localhost:3000/api/contact-mail
+content-type: application/json
+
+{
+    "email": "davud@gmail.com",
+    "fullName": "davud gorqaj",
+    "subject": "refund request",
+    "messageContent": "hello i am writing a message to your email to request a refund haha..."
+}
