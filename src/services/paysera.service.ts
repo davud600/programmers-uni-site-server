@@ -14,7 +14,7 @@ export default class PayseraService {
   public static async checkout(params: CheckoutParams): Promise<void> {
     const options = {
       projectid: PAYSERA_PROJECT_ID,
-      amount: '100', // in cents
+      amount: '1000', // in cents
       currency: 'EUR',
       orderid: '123123',
       ...params,
@@ -30,7 +30,7 @@ export default class PayseraService {
     console.log(`sign: ${sign}`);
 
     try {
-      await fetch(PAYSERA_API_LINK);
+      await fetch(`${PAYSERA_API_LINK}/${sign}`);
     } catch (error) {
       console.error(error);
     }
